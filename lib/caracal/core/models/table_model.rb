@@ -24,6 +24,7 @@ module Caracal
         const_set(:DEFAULT_TABLE_BORDER_SPACING,    0)          
         
         # accessors
+        attr_reader :table_header
         attr_reader :table_align
         attr_reader :table_width
         attr_reader :table_border_color
@@ -121,7 +122,7 @@ module Caracal
         #=============== SETTERS ==============================
         
         # integers
-        [:border_size, :border_spacing, :width].each do |m|
+        [:border_size, :border_spacing, :width, :header].each do |m|
           define_method "#{ m }" do |value|
             instance_variable_set("@table_#{ m }", value.to_i)
           end
@@ -193,7 +194,7 @@ module Caracal
         
         def option_keys
           k = []
-          k << [:data, :align, :width]
+          k << [:data, :align, :width, :header]
           k << [:border_color, :border_line, :border_size, :border_spacing]
           k << [:border_bottom, :border_left, :border_right, :border_top, :border_horizontal, :border_vertical]
           k.flatten

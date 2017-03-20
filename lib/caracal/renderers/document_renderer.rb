@@ -32,6 +32,9 @@ module Caracal
 
               xml.send 'w:sectPr' do
                 if document.page_number_show
+                  if rel = document.find_relationship('header1.xml')
+                    xml.send 'w:headerReference', {'r:id' => rel.formatted_id, 'w:type' => 'default'}
+                  end
                   if rel = document.find_relationship('footer1.xml')
                     xml.send 'w:footerReference', { 'r:id' => rel.formatted_id, 'w:type' => 'default' }
                   end
@@ -96,6 +99,20 @@ module Caracal
 
 
       #============= MODEL RENDERERS ===========================
+      
+      def render_field(xml, model)
+        xml.send 'w:p' do
+          xml.send 'w:r' do
+            xml.send 'w:fldChar', {'w:fldCharType' => "begin", 'w:dirty' => true}
+          end
+          xml.send 'w:r' do
+            xml.send 'w:instrText', {'xml:space' => 'preserve'}, model.field_type
+          end
+          xml.send 'w:r' do
+            xml.send 'w:fldChar', {'w:fldCharType' => 'end'}
+          end
+        end
+      end
 
       def render_image(xml, model)
         unless ds = document.default_style
@@ -295,8 +312,13 @@ module Caracal
               end
             end
           end
-          model.rows.each do |row|
+          model.rows.each_with_index do |row, k|
             xml.send 'w:tr' do
+              if model.table_header == 1 and k == 0
+                xml.send 'w:trPr' do
+                  xml.send 'w:tblHeader', {'w:val' => true}
+                end
+              end
               row.each do |tc|
                 xml.send 'w:tc' do
                   xml.send 'tcPr' do

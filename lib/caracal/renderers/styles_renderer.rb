@@ -70,6 +70,14 @@ module Caracal
                 xml.send 'w:basedOn', { 'w:val' => s.style_base }
                 xml.send 'w:next',    { 'w:val' => s.style_next }
                 xml.send 'w:pPr' do
+                  if s.style_id.include?('Heading')
+                    xml.send 'w:numPr' do
+                      if s.style_id[-1,1].to_i > 1
+                        xml.send 'w:ilvl', {'w:val' => s.style_id[-1,1].to_i - 1}
+                      end
+                      xml.send 'w:numId', {'w:val' => 99}
+                    end
+                  end
                   xml.send 'w:keepNext',          { 'w:val' => '0' }
                   xml.send 'w:keepLines',         { 'w:val' => '0' }
                   xml.send 'w:widowControl',      { 'w:val' => '1' }

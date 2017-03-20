@@ -20,7 +20,26 @@ module Caracal
         builder = ::Nokogiri::XML::Builder.with(declaration_xml) do |xml|
           xml.send 'w:numbering', root_options do
             
-            # add abstract definitions
+            # heading numbering
+            texts = ['%1.', '%1.%2.', '%1.%2.%3.', '%1.%2.%3.%4.', '%1.%2.%3.%4.%5.', '%1.%2.%3.%4.%5.%6.'] 
+            indents = [360, 360, 360, 360, 360, 360]
+            hangings = [360, 432, 504, 504, 504, 504]
+            xml.send 'w:abstractNum', {'w:abstractNumId' => 0} do
+              xml.send 'w:multiLevelType', {'w:val' => 'multilevel'}
+              for i in 0..5
+                xml.send 'w:lvl', {'w:ilvl' => i} do
+                  xml.send 'w:start', {'w:val' => 1}
+                  xml.send 'w:numFormat', {'w:val' => 'decimal'}
+                  xml.send 'w:pStyle', {'w:val' => "Heading#{i+1}"}
+                  xml.send 'w:lvlText', {'w:val' => texts[i]}
+                  xml.send 'w:lvlJc', {'w:val' => 'left'}
+                  xml.send 'w:pPr' do
+                    xml.send 'w:ind', { 'w:left' => indents[i], 'w:hanging' => hangings[i] }
+                  end
+                end 
+              end
+            end
+            
             document.toplevel_lists.each_with_index do |model, i|
               xml.send 'w:abstractNum', { 'w:abstractNumId' => i + 1 } do
                 model.level_map.each do |(level, type)|
@@ -41,6 +60,11 @@ module Caracal
                   end
                 end
               end
+            end
+            
+            # bind heading numbering
+            xml.send 'w:num', {'w:numId' => 99} do
+              xml.send 'w:abstractNumId', {'w:val' => 0}
             end
             
             # bind individual tables to abstract definitions
