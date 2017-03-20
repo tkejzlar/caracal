@@ -17,12 +17,33 @@ module Caracal
       def to_xml
         builder = ::Nokogiri::XML::Builder.with(declaration_xml) do |xml|
           xml.send 'w:hdr', root_options do
-            xml.send 'w:p', paragraph_options do
-              xml.send 'w:pPr' do
-                xml.send 'w:pStyle', {'w:val' => 'Zhlav'}
+            xml.send 'w:tbl' do
+              xml.send 'w:tblPr' do
+                xml.send 'w:tblW', { 'w:w' => 5000, 'w:type' => 'pct'}
               end
-              xml.send 'w:r' do
-                xml.send 'w:t', 'some random text here'
+              xml.send 'w:tr' do
+                xml.send 'w:tc' do
+                  xml.send 'w:p' do
+                    xml.send 'w:pPr' do
+                      xml.send 'w:jc', { 'w:val' => 'left' }
+                      xml.send 'w:spacing', { 'w:before' => 0, 'w:after' => 0, 'w:line' => 300, 'w:lineRule' => 'auto' }
+                    end
+                    xml.send 'w:r' do
+                      xml.send 'w:t', "#{document.document_doctype} for #{document.document_name}"
+                    end
+                  end
+                end
+                xml.send 'w:tc' do
+                  xml.send 'w:p' do
+                    xml.send 'w:pPr' do
+                      xml.send 'w:jc', { 'w:val' => 'right' }
+                      xml.send 'w:spacing', { 'w:before' => 0, 'w:after' => 0, 'w:line' => 300, 'w:lineRule' => 'auto' }
+                    end
+                    xml.send 'w:r' do
+                      xml.send 'w:t', "Proprietary"
+                    end
+                  end
+                end
               end
             end
           end

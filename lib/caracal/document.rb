@@ -3,6 +3,7 @@ require 'zip'
 
 require 'caracal/core/file_name'
 require 'caracal/core/fields'
+require 'caracal/core/document_settings'
 require 'caracal/core/fonts'
 require 'caracal/core/images'
 require 'caracal/core/list_styles'
@@ -50,6 +51,7 @@ module Caracal
     include Caracal::Core::Styles
     include Caracal::Core::ListStyles
 
+    include Caracal::Core::DocumentSettings
     include Caracal::Core::Fields
     include Caracal::Core::Images
     include Caracal::Core::Lists

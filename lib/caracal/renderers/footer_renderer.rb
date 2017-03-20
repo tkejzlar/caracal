@@ -17,19 +17,39 @@ module Caracal
       def to_xml
         builder = ::Nokogiri::XML::Builder.with(declaration_xml) do |xml|
           xml.send 'w:ftr', root_options do
-            xml.send 'w:p', paragraph_options do
-              xml.send 'w:pPr' do
-                xml.send 'w:contextualSpacing', { 'w:val' => '0' }
-                xml.send 'w:jc', { 'w:val' => "#{ document.page_number_align }" }
+            xml.send 'w:tbl' do
+              xml.send 'w:tblPr' do
+                xml.send 'w:tblW', { 'w:w' => 5000, 'w:type' => 'pct'}
               end
-              xml.send 'w:fldSimple', { 'w:dirty' => '0', 'w:instr' => 'PAGE', 'w:fldLock' => '0' } do
-                xml.send 'w:r', run_options do
-                  xml.send 'w:rPr'
+              xml.send 'w:tr' do
+                xml.send 'w:tc' do
+                  xml.send 'w:p' do
+                    xml.send 'w:pPr' do
+                      xml.send 'w:jc', { 'w:val' => 'left' }
+                      xml.send 'w:spacing', { 'w:before' => 0, 'w:after' => 0, 'w:line' => 300, 'w:lineRule' => 'auto' }
+                    end
+                    xml.send 'w:r' do
+                      xml.send 'w:t', "Document ID: #{document.document_id}"
+                      xml.send 'w:br'
+                      xml.send 'w:t', "Document version: #{document.document_version}"
+                    end
+                  end
                 end
-              end
-              xml.send 'w:r', run_options do
-                xml.send 'w:rPr' do
-                  xml.send 'w:rtl', { 'w:val' => '0' }
+                xml.send 'w:tc' do
+                  xml.send 'w:p' do
+                    xml.send 'w:pPr' do
+                      xml.send 'w:jc', { 'w:val' => 'right' }
+                      xml.send 'w:spacing', { 'w:before' => 0, 'w:after' => 0, 'w:line' => 300, 'w:lineRule' => 'auto' }
+                    end
+                    xml.send 'w:r' do
+                      xml.send 'w:t', { 'xml:space' => 'preserve' },  'Page '
+                    end
+                    xml.send 'w:fldSimple', { 'w:instr' => 'PAGE' , 'w:dirty' => true }
+                    xml.send 'w:r' do
+                      xml.send 'w:t', { 'xml:space' => 'preserve' },  ' of '
+                    end
+                    xml.send 'w:fldSimple', { 'w:instr' => 'SECTIONPAGES', 'w:dirty' => true}
+                  end
                 end
               end
             end
