@@ -67,6 +67,8 @@ module Caracal
           end
           
           def find_list_style(type, level)
+            pp type
+            pp level
             list_styles.find { |s| s.matches?(type, level) }
           end
           
