@@ -19,6 +19,7 @@ module Caracal
         attr_reader :document_name
         attr_reader :document_version
         attr_reader :document_doctype
+        attr_reader :document_cover
 
         # initialization
         def initialize(options={}, &block)
@@ -47,6 +48,10 @@ module Caracal
         def doctype(value)
           @document_doctype = value.to_s
         end
+        
+        def cover(value)
+          @document_cover = !!value
+        end
 
 
         #-------------------------------------------------------------
@@ -55,7 +60,7 @@ module Caracal
         private
 
         def option_keys
-          [:id, :name, :version, :doctype]
+          [:id, :name, :version, :doctype, :cover]
         end
 
       end
