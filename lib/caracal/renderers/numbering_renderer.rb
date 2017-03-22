@@ -40,13 +40,11 @@ module Caracal
               end
             end
             
-            pp document.toplevel_lists
             document.toplevel_lists.each_with_index do |model, i|
               xml.send 'w:abstractNum', { 'w:abstractNumId' => i + 1 } do
                 xml.send 'w:multiLevelType', {'w:val' => 'hybridMultilevel'}
                 model.level_map.each do |(level, type)|
                   if s = document.find_list_style(type, level)
-                    pp s
                     xml.send 'w:lvl', { 'w:ilvl' => s.style_level } do
                       xml.send 'w:start',      { 'w:val' => s.style_start }
                       xml.send 'w:numFmt',     { 'w:val' => s.style_format }
