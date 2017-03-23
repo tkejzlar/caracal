@@ -322,8 +322,15 @@ module Caracal
               row.each do |tc|
                 xml.send 'w:tc' do
                   xml.send 'tcPr' do
-                    if tc.grid_span.to_i > 1
-                      xml.send 'w:gridSpan', { 'w:val' => tc.grid_span }
+                    if tc.cell_grid_span.to_i > 1
+                      xml.send 'w:gridSpan', { 'w:val' => tc.cell_grid_span }
+                    end
+                    if tc.cell_width
+                      if tc.cell_width.include?('%')
+                        xml.send 'w:tcW', { 'w:type' => 'pct', 'w:w' => "#{tc.cell_width}" }
+                      else
+                        xml.send 'w:tcW', { 'w:type' => 'dxa', 'w:w' => "#{tc.cell_width.to_i}" }
+                      end
                     end
                     xml.send 'w:shd', { 'w:fill' => tc.cell_background }
                     xml.send 'w:vAlign', { 'w:val' => tc.cell_vertical_align }

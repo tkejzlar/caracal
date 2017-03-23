@@ -96,7 +96,10 @@ module Caracal
         def calculate_width(default_width)
           width(default_width) unless cell_width.to_i > 0
 
-          container_width = cell_width - cell_margin_left - cell_margin_right
+          if cell_width.include?('%')
+            cell_width = cell_width.to_s.gsub('%', '').to_i * 50
+          end
+          container_width = cell_width.to_i - cell_margin_left - cell_margin_right
 
           contents.each do |model|
             if model.respond_to?(:calculate_width)
@@ -121,7 +124,7 @@ module Caracal
         # integers
         [:width].each do |m|
           define_method "#{ m }" do |value|
-            instance_variable_set("@cell_#{ m }", value.to_i)
+            instance_variable_set("@cell_#{ m }", value.to_s)
           end
         end
 
@@ -146,10 +149,8 @@ module Caracal
           end
         end
         
-        [:grid_span].each do |m|
-          define_method "#{ m }" do |value|
-            instance_variable_set("@cell_#{ m }", value.to_s.to_sym)
-          end
+        def grid_span(value = 1)
+          @cell_grid_span = value.to_i
         end
         
         
