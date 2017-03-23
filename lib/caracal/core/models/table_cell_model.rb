@@ -25,6 +25,7 @@ module Caracal
         attr_reader :cell_width
         attr_reader :cell_margins
         attr_reader :cell_vertical_align
+        attr_reader :cell_grid_span
 
         # initialization
         def initialize(options={}, &block)
@@ -35,7 +36,7 @@ module Caracal
           if content = options.delete(:content)
             p content, options.dup, &block
           end
-
+          
           super options, &block
         end
 
@@ -144,8 +145,14 @@ module Caracal
             instance_variable_set("@cell_#{ m }", value.to_s.to_sym)
           end
         end
-
-
+        
+        [:grid_span].each do |m|
+          define_method "#{ m }" do |value|
+            instance_variable_set("@cell_#{ m }", value.to_s.to_sym)
+          end
+        end
+        
+        
         #=============== VALIDATION ===========================
 
         def valid?
@@ -159,7 +166,7 @@ module Caracal
         private
 
         def option_keys
-          [:background, :margins, :width, :vertical_align]
+          [:background, :margins, :width, :vertical_align, :grid_span]
         end
 
       end

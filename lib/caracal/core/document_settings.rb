@@ -21,6 +21,7 @@ module Caracal
           attr_reader :document_id
           attr_reader :document_version
           attr_reader :document_doctype
+          attr_reader :document_template
           attr_reader :document_cover
 
 
@@ -39,6 +40,7 @@ module Caracal
               @document_name     = model.document_name
               @document_version  = model.document_version
               @document_doctype  = model.document_doctype
+              @document_template = model.document_template
               @document_cover    = model.document_cover
             else
               raise Caracal::Errors::InvalidModelError, 'page_size method requires non-zero :width and :height options.'

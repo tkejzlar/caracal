@@ -203,7 +203,7 @@ module Caracal
     
     def render_header(zip)
       if document_cover == true
-        pp 'cover'
+        
       end
       content = ::Caracal::Renderers::HeaderRenderer.render(self)
       zip.put_next_entry('word/header1.xml')
